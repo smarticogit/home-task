@@ -137,6 +137,41 @@ function colorByValue(colorVal) {
   return COLOR_OPTIONS.find(c => c.color === colorVal) || COLOR_OPTIONS[0];
 }
 
+/* Calcula posição Y relativa ao topo absoluto do elemento,
+   independente de scroll de página ou de container interno */
+function getRelY(e, el) {
+  let top = 0;
+  let node = el;
+  while (node) {
+    top += node.offsetTop;
+    node = node.offsetParent;
+  }
+  return e.pageY - top;
+}
+
+/* =====================
+   MODAL DE CONFIRMAÇÃO
+   ===================== */
+let confirmCallback = null;
+
+function showConfirm(title, msg, onOk) {
+  document.getElementById('confirm-title').textContent = title;
+  document.getElementById('confirm-msg').textContent = msg;
+  confirmCallback = onOk;
+  document.getElementById('modal-confirm-bg').style.display = 'flex';
+}
+
+function confirmOk() {
+  document.getElementById('modal-confirm-bg').style.display = 'none';
+  if (confirmCallback) confirmCallback();
+  confirmCallback = null;
+}
+
+function confirmCancel() {
+  document.getElementById('modal-confirm-bg').style.display = 'none';
+  confirmCallback = null;
+}
+
 /* =====================
    CALENDÁRIO
    ===================== */
@@ -186,8 +221,7 @@ function renderDayCols() {
       if (!dragging) return;
       const t = taskById(dragging.taskId);
       if (!t) return;
-      const colTop = col.getBoundingClientRect().top + window.pageYOffset;
-      const relY = e.pageY - colTop;
+      const relY = getRelY(e, col);
       const sm = Math.max(0, snap30(relY / PPM));
       prev.style.display = 'block';
       prev.style.top = sm * PPM + 'px';
@@ -203,8 +237,7 @@ function renderDayCols() {
       e.preventDefault();
       prev.style.display = 'none';
       if (!dragging) return;
-      const colTop = col.getBoundingClientRect().top + window.pageYOffset;
-      const relY = e.pageY - colTop;
+      const relY = getRelY(e, col);
       const sm = Math.max(0, snap30(relY / PPM));
       if (HS + Math.floor(sm / 60) >= HE) return;
       if (isOccupied(d, sm, dragging.taskId, dragging.existingKey)) return;
@@ -397,13 +430,15 @@ function renderTaskCards() {
 function confirmDeleteTask(taskId) {
   const t = taskById(taskId);
   if (!t) return;
-  if (confirm(`Excluir "${t.name}"?\nEla será removida do calendário também.`)) {
-    TASKS = TASKS.filter(x => x.id !== taskId);
-    Object.keys(scheduled).forEach(k => { if (scheduled[k].taskId === taskId) delete scheduled[k]; });
-    save();
-    renderAll();
-    showToast('Tarefa excluída');
-  }
+  showConfirm(
+    `Excluir "${t.name}"?`,
+    'Ela será removida do calendário também.',
+    () => {
+      TASKS = TASKS.filter(x => x.id !== taskId);
+      Object.keys(scheduled).forEach(k => { if (scheduled[k].taskId === taskId) delete scheduled[k]; });
+      save(); renderAll(); showToast('Tarefa excluída');
+    }
+  );
 }
 
 /* =====================
@@ -458,15 +493,17 @@ function renderPeopleCards() {
 function confirmDeletePerson(personId) {
   const p = personById(personId);
   if (!p) return;
-  if (confirm(`Excluir "${p.name}"?\nAs tarefas atribuídas a ela ficarão sem responsável.`)) {
-    PEOPLE = PEOPLE.filter(x => x.id !== personId);
-    Object.keys(scheduled).forEach(k => {
-      if (scheduled[k].personId === personId) scheduled[k].personId = '';
-    });
-    save();
-    renderAll();
-    showToast(`${p.name} removido(a)`);
-  }
+  showConfirm(
+    `Excluir "${p.name}"?`,
+    'As tarefas atribuídas a ela ficarão sem responsável.',
+    () => {
+      PEOPLE = PEOPLE.filter(x => x.id !== personId);
+      Object.keys(scheduled).forEach(k => {
+        if (scheduled[k].personId === personId) scheduled[k].personId = '';
+      });
+      save(); renderAll(); showToast(`${p.name} removido(a)`);
+    }
+  );
 }
 
 /* =====================
@@ -573,9 +610,17 @@ function saveMT() {
 
 function deleteTask() {
   if (!currentTaskId) return;
-  TASKS = TASKS.filter(t => t.id !== currentTaskId);
-  Object.keys(scheduled).forEach(k => { if (scheduled[k].taskId === currentTaskId) delete scheduled[k]; });
-  closeMT(); save(); renderAll(); showToast('Tarefa excluída');
+  const t = taskById(currentTaskId);
+  if (!t) return;
+  showConfirm(
+    `Excluir "${t.name}"?`,
+    'Ela será removida do calendário também.',
+    () => {
+      TASKS = TASKS.filter(x => x.id !== currentTaskId);
+      Object.keys(scheduled).forEach(k => { if (scheduled[k].taskId === currentTaskId) delete scheduled[k]; });
+      closeMT(); save(); renderAll(); showToast('Tarefa excluída');
+    }
+  );
 }
 
 /* =====================
@@ -664,13 +709,17 @@ function deletePerson() {
   if (!currentPersonId) return;
   const p = personById(currentPersonId);
   if (!p) return;
-  if (confirm(`Excluir "${p.name}"?`)) {
-    PEOPLE = PEOPLE.filter(x => x.id !== currentPersonId);
-    Object.keys(scheduled).forEach(k => {
-      if (scheduled[k].personId === currentPersonId) scheduled[k].personId = '';
-    });
-    closeMP(); save(); renderAll(); showToast(`${p.name} removido(a)`);
-  }
+  showConfirm(
+    `Excluir "${p.name}"?`,
+    'As tarefas atribuídas a ela ficarão sem responsável.',
+    () => {
+      PEOPLE = PEOPLE.filter(x => x.id !== currentPersonId);
+      Object.keys(scheduled).forEach(k => {
+        if (scheduled[k].personId === currentPersonId) scheduled[k].personId = '';
+      });
+      closeMP(); save(); renderAll(); showToast(`${p.name} removido(a)`);
+    }
+  );
 }
 
 /* =====================
@@ -817,7 +866,7 @@ function goToPeople() {
 /* =====================
    INICIALIZAÇÃO
    ===================== */
-['modal-block-bg', 'modal-task-bg', 'modal-new-bg', 'modal-detail-bg', 'modal-person-bg'].forEach(id => {
+['modal-block-bg', 'modal-task-bg', 'modal-new-bg', 'modal-detail-bg', 'modal-person-bg', 'modal-confirm-bg'].forEach(id => {
   document.getElementById(id).addEventListener('click', e => {
     if (e.target.id === id) document.getElementById(id).style.display = 'none';
   });

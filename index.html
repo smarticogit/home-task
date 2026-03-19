@@ -164,6 +164,18 @@
   </div>
 </div>
 
+<!-- MODAL: confirmação customizada -->
+<div class="modal-bg" id="modal-confirm-bg">
+  <div class="modal" style="width:320px">
+    <h3 id="confirm-title">Confirmar</h3>
+    <p id="confirm-msg" style="font-size:13px;color:#555;margin-top:6px;line-height:1.6"></p>
+    <div class="modal-btns" style="margin-top:1.25rem">
+      <button class="btn" onclick="confirmCancel()">Cancelar</button>
+      <button class="btn" id="confirm-ok-btn" onclick="confirmOk()" style="color:#c0392b;border-color:#f0d0ce">Excluir</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="app.js"></script>
