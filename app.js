@@ -751,12 +751,67 @@ function renderAll() {
   renderPool();
   renderSummary();
   renderPeopleRow();
+  renderNoPeopleBanner();
   const cur = ['tasks', 'people', 'stats'].find(p =>
     document.getElementById('page-' + p).style.display === 'block'
   );
   if (cur === 'tasks')  renderTaskCards();
   if (cur === 'people') renderPeopleCards();
   if (cur === 'stats')  renderStats();
+}
+
+/* =====================
+   BANNER: SEM PESSOAS
+   ===================== */
+function renderNoPeopleBanner() {
+  const existing = document.getElementById('no-people-banner');
+  if (existing) existing.remove();
+
+  if (PEOPLE.length > 0) return;
+
+  const banner = document.createElement('div');
+  banner.id = 'no-people-banner';
+  banner.style.cssText = `
+    background: #fffbea;
+    border: 1px solid #f0d070;
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  `;
+  banner.innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:20px">👋</span>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#92650a">Nenhuma pessoa cadastrada ainda</div>
+        <div style="font-size:12px;color:#b8860b;margin-top:2px">Cadastre as pessoas da casa para distribuir as tarefas</div>
+      </div>
+    </div>
+    <button onclick="goToPeople()" style="
+      font-size:13px;
+      font-weight:600;
+      padding:7px 16px;
+      border-radius:8px;
+      border:1px solid #d4a017;
+      background:#fff3cd;
+      color:#92650a;
+      cursor:pointer;
+      font-family:inherit;
+      white-space:nowrap;
+    ">Cadastrar pessoas →</button>
+  `;
+
+  const calPage = document.getElementById('page-calendar');
+  calPage.insertBefore(banner, calPage.firstChild);
+}
+
+function goToPeople() {
+  const btn = document.querySelector('.nav-btn:nth-child(3)');
+  goTo('people', btn);
 }
 
 /* =====================
@@ -769,3 +824,4 @@ function renderAll() {
 });
 
 renderAll();
+renderNoPeopleBanner();
