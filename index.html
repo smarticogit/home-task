@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarefas da Casa</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>🏠 Tarefas da Casa</h1>
+
+<!-- =====================
+     NAVEGAÇÃO
+     ===================== -->
+<div class="nav">
+  <button class="nav-btn active" onclick="goTo('calendar', this)">Calendário</button>
+  <button class="nav-btn" onclick="goTo('tasks', this)">Tarefas</button>
+  <button class="nav-btn" onclick="goTo('stats', this)">Resumo</button>
+  <div class="nav-spacer"></div>
+  <button class="btn-clear" onclick="clearWeek()">Limpar semana</button>
+</div>
+
+<!-- =====================
+     PÁGINA: CALENDÁRIO
+     ===================== -->
+<div id="page-calendar">
+
+  <div class="summary-bar" id="summary-bar"></div>
+
+  <div class="cal-wrap">
+    <div class="cal-header-row">
+      <div class="cal-corner"></div>
+      <div class="cal-day-head">Seg</div>
+      <div class="cal-day-head">Ter</div>
+      <div class="cal-day-head">Qua</div>
+      <div class="cal-day-head">Qui</div>
+      <div class="cal-day-head">Sex</div>
+      <div class="cal-day-head">Sáb</div>
+      <div class="cal-day-head">Dom</div>
+    </div>
+    <div class="cal-scroll" id="cal-scroll">
+      <div class="cal-body-row">
+        <div class="cal-time-col" id="time-col"></div>
+        <div id="day-cols" style="display:flex;flex:1;position:relative"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pool-wrap">
+    <div class="section-title">Arraste para o calendário · duplo clique para detalhes</div>
+    <div class="pool-tasks" id="pool-tasks"></div>
+  </div>
+
+  <div class="people-row" id="people-row"></div>
+
+</div>
+
+<!-- =====================
+     PÁGINA: TAREFAS
+     ===================== -->
+<div id="page-tasks" style="display:none">
+  <div class="tasks-page-header">
+    <div class="section-title" style="margin:0">Gerenciar tarefas</div>
+    <button class="btn" onclick="openMN()">+ Nova tarefa</button>
+  </div>
+  <div class="task-cards-grid" id="task-cards-grid"></div>
+</div>
+
+<!-- =====================
+     PÁGINA: RESUMO
+     ===================== -->
+<div id="page-stats" style="display:none">
+  <div class="stats-grid" id="stats-grid"></div>
+  <div class="stat-panel">
+    <div class="section-title">Distribuição por pessoa</div>
+    <div id="stats-bars"></div>
+  </div>
+  <div class="stat-panel">
+    <div class="section-title">Tarefas agendadas</div>
+    <div id="stats-tasks"></div>
+  </div>
+</div>
+
+<!-- =====================
+     MODAL: BLOCO CALENDÁRIO
+     ===================== -->
+<div class="modal-bg" id="modal-block-bg">
+  <div class="modal">
+    <h3 id="mb-title">Configurar tarefa</h3>
+    <label>Pessoa responsável</label>
+    <select id="mb-person"></select>
+    <div class="modal-btns">
+      <button class="btn-danger-txt" onclick="removeBlock()">Remover do calendário</button>
+      <button class="btn" onclick="closeMB()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveMB()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- =====================
+     MODAL: EDITAR TAREFA
+     ===================== -->
+<div class="modal-bg" id="modal-task-bg">
+  <div class="modal">
+    <h3 id="mt-title">Editar tarefa</h3>
+    <label>Nome</label>
+    <input type="text" id="mt-name" placeholder="Nome da tarefa">
+    <label>Duração (minutos)</label>
+    <input type="number" id="mt-mins" min="5" max="480" step="5">
+    <div class="modal-btns">
+      <button class="btn-danger-txt" onclick="deleteTask()">Excluir tarefa</button>
+      <button class="btn" onclick="closeMT()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveMT()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- =====================
+     MODAL: NOVA TAREFA
+     ===================== -->
+<div class="modal-bg" id="modal-new-bg">
+  <div class="modal">
+    <h3>Nova tarefa</h3>
+    <label>Nome</label>
+    <input type="text" id="mn-name" placeholder="Ex: Regar plantas">
+    <label>Duração (minutos)</label>
+    <input type="number" id="mn-mins" value="30" min="5" max="480" step="5">
+    <div class="modal-btns">
+      <button class="btn" onclick="closeMN()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveNewTask()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<!-- =====================
+     MODAL: DETALHES TAREFA
+     ===================== -->
+<div class="modal-bg" id="modal-detail-bg">
+  <div class="modal">
+    <h3 id="dt-title"></h3>
+    <div id="dt-body" style="margin-top:6px"></div>
+    <div class="modal-btns" style="margin-top:1rem">
+      <button class="btn" onclick="closeDetail()">Fechar</button>
+      <button class="btn btn-primary" onclick="openEditFromDetail()">Editar tarefa</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast de confirmação -->
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
