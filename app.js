@@ -51,6 +51,7 @@ const HE    = 24;
 const SPX   = 30;
 const PPM   = SPX / 30;
 const COL_H = (HE - HS) * 2 * SPX;
+const TIME_COL_W = 44;
 const DAYS_LBL = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
 
 /* =====================

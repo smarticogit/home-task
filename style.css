@@ -72,6 +72,53 @@ h1 { font-size: 20px; font-weight: 600; margin-bottom: 1rem; }
 .summary-num { font-weight: 600; color: #1a1a1a; margin-right: 3px; }
 
 /* =====================
+   CALENDAR LAYOUT (lado a lado)
+   ===================== */
+.cal-layout {
+  display: grid;
+  grid-template-columns: 1fr 180px;
+  gap: 12px;
+  align-items: start;
+}
+
+.cal-main {
+  min-width: 0;
+}
+
+.cal-sidebar {
+  position: sticky;
+  top: 12px;
+}
+
+.cal-sidebar .pool-wrap {
+  margin-bottom: 0;
+}
+
+.pool-tasks-sidebar {
+  flex-direction: column;
+  gap: 6px !important;
+  min-height: 80px;
+}
+
+.pool-tasks-sidebar .task-chip {
+  width: 100%;
+  justify-content: space-between;
+}
+
+@media (max-width: 700px) {
+  .cal-layout {
+    grid-template-columns: 1fr;
+  }
+  .cal-sidebar {
+    position: static;
+  }
+  .pool-tasks-sidebar {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+/* =====================
    CALENDAR
    ===================== */
 .cal-wrap {
@@ -82,7 +129,7 @@ h1 { font-size: 20px; font-weight: 600; margin-bottom: 1rem; }
   margin-bottom: 14px;
 }
 .cal-header-row { display: flex; border-bottom: 1px solid #e0e0e0; background: #fafafa; }
-.cal-corner { width: 56px; flex-shrink: 0; }
+.cal-corner { width: 44px; flex-shrink: 0; }
 .cal-day-head {
   flex: 1;
   padding: 8px 4px;
@@ -94,7 +141,7 @@ h1 { font-size: 20px; font-weight: 600; margin-bottom: 1rem; }
 }
 .cal-scroll { overflow: visible; }
 .cal-body-row { display: flex; }
-.cal-time-col { width: 56px; flex-shrink: 0; }
+.cal-time-col { width: 44px; flex-shrink: 0; }
 .cal-time-label {
   height: 30px;
   font-size: 10px;

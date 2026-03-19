@@ -25,29 +25,40 @@
      ===================== -->
 <div id="page-calendar">
   <div class="summary-bar" id="summary-bar"></div>
-  <div class="cal-wrap">
-    <div class="cal-header-row">
-      <div class="cal-corner"></div>
-      <div class="cal-day-head">Seg</div>
-      <div class="cal-day-head">Ter</div>
-      <div class="cal-day-head">Qua</div>
-      <div class="cal-day-head">Qui</div>
-      <div class="cal-day-head">Sex</div>
-      <div class="cal-day-head">Sáb</div>
-      <div class="cal-day-head">Dom</div>
+  <div class="cal-layout">
+
+    <!-- Calendário principal -->
+    <div class="cal-main">
+      <div class="cal-wrap">
+        <div class="cal-header-row">
+          <div class="cal-corner"></div>
+          <div class="cal-day-head">Seg</div>
+          <div class="cal-day-head">Ter</div>
+          <div class="cal-day-head">Qua</div>
+          <div class="cal-day-head">Qui</div>
+          <div class="cal-day-head">Sex</div>
+          <div class="cal-day-head">Sáb</div>
+          <div class="cal-day-head">Dom</div>
+        </div>
+        <div class="cal-scroll" id="cal-scroll">
+          <div class="cal-body-row">
+            <div class="cal-time-col" id="time-col"></div>
+            <div id="day-cols" style="display:flex;flex:1;position:relative"></div>
+          </div>
+        </div>
+      </div>
+      <div class="people-row" id="people-row"></div>
     </div>
-    <div class="cal-scroll" id="cal-scroll">
-      <div class="cal-body-row">
-        <div class="cal-time-col" id="time-col"></div>
-        <div id="day-cols" style="display:flex;flex:1;position:relative"></div>
+
+    <!-- Sidebar fixa de tarefas -->
+    <div class="cal-sidebar">
+      <div class="pool-wrap" style="margin-bottom:0">
+        <div class="section-title">Tarefas · duplo clique p/ detalhes</div>
+        <div class="pool-tasks pool-tasks-sidebar" id="pool-tasks"></div>
       </div>
     </div>
+
   </div>
-  <div class="pool-wrap">
-    <div class="section-title">Arraste para o calendário · duplo clique para detalhes</div>
-    <div class="pool-tasks" id="pool-tasks"></div>
-  </div>
-  <div class="people-row" id="people-row"></div>
 </div>
 
 <!-- =====================
