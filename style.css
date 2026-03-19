@@ -92,7 +92,7 @@ h1 { font-size: 20px; font-weight: 600; margin-bottom: 1rem; }
   color: #666;
   border-left: 1px solid #e0e0e0;
 }
-.cal-scroll { max-height: 540px; overflow-y: auto; }
+.cal-scroll { overflow: visible; }
 .cal-body-row { display: flex; }
 .cal-time-col { width: 56px; flex-shrink: 0; }
 .cal-time-label {
