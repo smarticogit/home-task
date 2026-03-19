@@ -186,9 +186,10 @@ function renderDayCols() {
       if (!dragging) return;
       const t = taskById(dragging.taskId);
       if (!t) return;
+      const calScroll = col.closest('.cal-scroll');
       const rect = col.getBoundingClientRect();
-      const scrollTop = col.closest('.cal-scroll').scrollTop;
-      const sm = Math.max(0, snap30((e.clientY - rect.top + scrollTop) / PPM));
+      const relY = (e.clientY - rect.top) + calScroll.scrollTop;
+      const sm = Math.max(0, snap30(relY / PPM));
       prev.style.display = 'block';
       prev.style.top = sm * PPM + 'px';
       prev.style.height = heightPx(t.mins) + 'px';
@@ -203,9 +204,10 @@ function renderDayCols() {
       e.preventDefault();
       prev.style.display = 'none';
       if (!dragging) return;
+      const calScroll = col.closest('.cal-scroll');
       const rect = col.getBoundingClientRect();
-      const scrollTop = col.closest('.cal-scroll').scrollTop;
-      const sm = Math.max(0, snap30((e.clientY - rect.top + scrollTop) / PPM));
+      const relY = (e.clientY - rect.top) + calScroll.scrollTop;
+      const sm = Math.max(0, snap30(relY / PPM));
       if (HS + Math.floor(sm / 60) >= HE) return;
       if (isOccupied(d, sm, dragging.taskId, dragging.existingKey)) return;
       const wasNew = !dragging.existingKey;
