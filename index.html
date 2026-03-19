@@ -10,12 +10,11 @@
 
 <h1>🏠 Tarefas da Casa</h1>
 
-<!-- =====================
-     NAVEGAÇÃO
-     ===================== -->
+<!-- NAV -->
 <div class="nav">
   <button class="nav-btn active" onclick="goTo('calendar', this)">Calendário</button>
   <button class="nav-btn" onclick="goTo('tasks', this)">Tarefas</button>
+  <button class="nav-btn" onclick="goTo('people', this)">Pessoas</button>
   <button class="nav-btn" onclick="goTo('stats', this)">Resumo</button>
   <div class="nav-spacer"></div>
   <button class="btn-clear" onclick="clearWeek()">Limpar semana</button>
@@ -25,9 +24,7 @@
      PÁGINA: CALENDÁRIO
      ===================== -->
 <div id="page-calendar">
-
   <div class="summary-bar" id="summary-bar"></div>
-
   <div class="cal-wrap">
     <div class="cal-header-row">
       <div class="cal-corner"></div>
@@ -46,25 +43,33 @@
       </div>
     </div>
   </div>
-
   <div class="pool-wrap">
     <div class="section-title">Arraste para o calendário · duplo clique para detalhes</div>
     <div class="pool-tasks" id="pool-tasks"></div>
   </div>
-
   <div class="people-row" id="people-row"></div>
-
 </div>
 
 <!-- =====================
      PÁGINA: TAREFAS
      ===================== -->
 <div id="page-tasks" style="display:none">
-  <div class="tasks-page-header">
+  <div class="page-header">
     <div class="section-title" style="margin:0">Gerenciar tarefas</div>
     <button class="btn" onclick="openMN()">+ Nova tarefa</button>
   </div>
   <div class="task-cards-grid" id="task-cards-grid"></div>
+</div>
+
+<!-- =====================
+     PÁGINA: PESSOAS
+     ===================== -->
+<div id="page-people" style="display:none">
+  <div class="page-header">
+    <div class="section-title" style="margin:0">Gerenciar pessoas</div>
+    <button class="btn" onclick="openMP()">+ Nova pessoa</button>
+  </div>
+  <div class="people-cards-grid" id="people-cards-grid"></div>
 </div>
 
 <!-- =====================
@@ -82,9 +87,7 @@
   </div>
 </div>
 
-<!-- =====================
-     MODAL: BLOCO CALENDÁRIO
-     ===================== -->
+<!-- MODAL: bloco calendário -->
 <div class="modal-bg" id="modal-block-bg">
   <div class="modal">
     <h3 id="mb-title">Configurar tarefa</h3>
@@ -98,9 +101,7 @@
   </div>
 </div>
 
-<!-- =====================
-     MODAL: EDITAR TAREFA
-     ===================== -->
+<!-- MODAL: editar tarefa -->
 <div class="modal-bg" id="modal-task-bg">
   <div class="modal">
     <h3 id="mt-title">Editar tarefa</h3>
@@ -108,6 +109,8 @@
     <input type="text" id="mt-name" placeholder="Nome da tarefa">
     <label>Duração (minutos)</label>
     <input type="number" id="mt-mins" min="5" max="480" step="5">
+    <label>Descrição / itens da tarefa</label>
+    <textarea id="mt-desc" placeholder="Ex: Lavar louça do almoço, secar e guardar..."></textarea>
     <div class="modal-btns">
       <button class="btn-danger-txt" onclick="deleteTask()">Excluir tarefa</button>
       <button class="btn" onclick="closeMT()">Cancelar</button>
@@ -116,9 +119,7 @@
   </div>
 </div>
 
-<!-- =====================
-     MODAL: NOVA TAREFA
-     ===================== -->
+<!-- MODAL: nova tarefa -->
 <div class="modal-bg" id="modal-new-bg">
   <div class="modal">
     <h3>Nova tarefa</h3>
@@ -126,6 +127,8 @@
     <input type="text" id="mn-name" placeholder="Ex: Regar plantas">
     <label>Duração (minutos)</label>
     <input type="number" id="mn-mins" value="30" min="5" max="480" step="5">
+    <label>Descrição / itens da tarefa</label>
+    <textarea id="mn-desc" placeholder="Descreva os passos ou itens desta tarefa..."></textarea>
     <div class="modal-btns">
       <button class="btn" onclick="closeMN()">Cancelar</button>
       <button class="btn btn-primary" onclick="saveNewTask()">Adicionar</button>
@@ -133,9 +136,7 @@
   </div>
 </div>
 
-<!-- =====================
-     MODAL: DETALHES TAREFA
-     ===================== -->
+<!-- MODAL: detalhes da tarefa (duplo clique) -->
 <div class="modal-bg" id="modal-detail-bg">
   <div class="modal">
     <h3 id="dt-title"></h3>
@@ -147,7 +148,22 @@
   </div>
 </div>
 
-<!-- Toast de confirmação -->
+<!-- MODAL: nova/editar pessoa -->
+<div class="modal-bg" id="modal-person-bg">
+  <div class="modal">
+    <h3 id="mp-title">Nova pessoa</h3>
+    <label>Nome</label>
+    <input type="text" id="mp-name" placeholder="Ex: João">
+    <label>Cor</label>
+    <div class="color-grid" id="color-grid"></div>
+    <div class="modal-btns">
+      <button class="btn-danger-txt" id="mp-delete-btn" onclick="deletePerson()" style="display:none">Excluir pessoa</button>
+      <button class="btn" onclick="closeMP()">Cancelar</button>
+      <button class="btn btn-primary" onclick="savePerson()">Salvar</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="app.js"></script>
