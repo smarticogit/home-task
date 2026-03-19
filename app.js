@@ -33,10 +33,14 @@ const DEFAULT_TASKS = [
   { id: 'lavar-roupa',    name: 'Lavar Roupa',      mins: 10,  desc: '' },
   { id: 'estender-roupa', name: 'Estender Roupa',   mins: 20,  desc: '' },
   { id: 'guardar-roupa',  name: 'Guardar Roupa',    mins: 30,  desc: '' },
+  { id: 'levar-ana',      name: 'Levar Ana',        mins: 30,  desc: '' },
+  { id: 'buscar-ana',     name: 'Buscar Ana',       mins: 30,  desc: '' },
   { id: 'fazer-compras',  name: 'Fazer Compras',    mins: 90,  desc: '' },
   { id: 'fazer-feira',    name: 'Fazer Feira',      mins: 120, desc: '' },
+  { id: 'cabelo-ana',     name: 'Cabelo da Ana',    mins: 120, desc: '' },
   { id: 'jogar-lixo',     name: 'Jogar Lixo',       mins: 10,  desc: '' },
   { id: 'buscar-pao',     name: 'Buscar pão',       mins: 10,  desc: '' },
+  { id: 'limpar-casa',    name: 'Limpar Casa',      mins: 30,  desc: '' },
 ];
 
 /* =====================
@@ -182,8 +186,8 @@ function renderDayCols() {
       if (!dragging) return;
       const t = taskById(dragging.taskId);
       if (!t) return;
-      const rect = col.getBoundingClientRect();
-      const relY = e.clientY - rect.top + window.scrollY;
+      const colTop = col.getBoundingClientRect().top + window.pageYOffset;
+      const relY = e.pageY - colTop;
       const sm = Math.max(0, snap30(relY / PPM));
       prev.style.display = 'block';
       prev.style.top = sm * PPM + 'px';
@@ -199,8 +203,8 @@ function renderDayCols() {
       e.preventDefault();
       prev.style.display = 'none';
       if (!dragging) return;
-      const rect = col.getBoundingClientRect();
-      const relY = e.clientY - rect.top + window.scrollY;
+      const colTop = col.getBoundingClientRect().top + window.pageYOffset;
+      const relY = e.pageY - colTop;
       const sm = Math.max(0, snap30(relY / PPM));
       if (HS + Math.floor(sm / 60) >= HE) return;
       if (isOccupied(d, sm, dragging.taskId, dragging.existingKey)) return;
